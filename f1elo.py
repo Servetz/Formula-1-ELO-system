@@ -6,13 +6,14 @@ import sys
 currentDate = datetime.date.today()
 year = currentDate.year
 
+#i read all the csv files and put them inside lists
 driver_standings_df = pd.read_csv('archive/driver_standings.csv', usecols=['raceId', 'driverId', 'position'])
 driver_standings = [list(row) for row in driver_standings_df.values]
 driver_standings = sorted(driver_standings)
 
 races_df = pd.read_csv('archive/races.csv', usecols=['raceId', 'year'])
 races = [list(row) for row in races_df.values]
-races.sort(key = lambda row: row[1])
+races.sort(key = lambda row: row[1]) #i sort the list by year beacuse race Ids are not following the right order
 
 drivers_df = pd.read_csv('archive/drivers.csv', usecols=['driverId', 'forename', 'surname'])
 drivers = [list(row) for row in drivers_df.values]
@@ -23,8 +24,10 @@ qualifying = [list(row) for row in qualifying_df.values]
 racing_df = pd.read_csv('archive/results.csv', usecols=['raceId','driverId','constructorId','position'])
 racing = [list(row) for row in racing_df.values]
 
-ELO = {}
+ELO = {} #in this dictionary i'll save the name of the driver as the key and the elo as the value
 
+
+#the idea is to build a big 2-d list with all the data i need from the various lists
 def getDrivers(year):
     final_table = []
     for ds in driver_standings:
@@ -74,6 +77,7 @@ def getYear(year):
             season.append(elem)
     return season
 
+#this is here because the plan was to take in account the previous season final standings to evaluate elo changes
 # def finalStandings(year):
 #     fullseason = getYear(year)
 #     lastrace = fullseason[len(fullseason)-1][0]
@@ -99,16 +103,18 @@ def calculate(start, finish, today):
         season = getYear(i)
         raceIds = getRaces(i)
         for id in raceIds:
-            lista = []
+            lst = []
             for result in season:
                 if result[0] == id:
                     if len(result) == 8:
-                        lista.append([result[1], result[4], result[6], result[5], result[7]])
+                        lst.append([result[1], result[4], result[6], result[5], result[7]])
                     elif len(result) == 7:
-                        lista.append([result[1], result[4], result[5], result[6]])
-            ELO.update(elo.getELO(lista, ELO))
+                        lst.append([result[1], result[4], result[5], result[6]])
+            ELO.update(elo.getELO(lst, ELO))
         print('season\'s drivers ELO updated')
 
+#as you can see i get some arguments when calling the program, those are 
+#the starting year fo the standings, the final year and the csv file name where they're gonne be saved
 def main():
     standings = []
     calculate(int(sys.argv[1]), int(sys.argv[2]), year)
@@ -121,6 +127,7 @@ def main():
         print('POS\tELO\t\tDRIVER')
         for i in range(len(standings)):
             print(f'{i+1}\t{round(standings[i][1],2)}\t\t{standings[i][0]}')
-            file.write(f'{i+1};{round(standings[i][1],2)};{standings[i][0]}\n')
+            file.write(f'{i+1};{round(standings[i][1],2)};{standings[i][0]}\n') 
+            #i write the new csv with ; as separators beacuse it's my excel default and i was too lazy to change it
 
 main()
