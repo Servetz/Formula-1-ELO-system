@@ -36,7 +36,8 @@ So here's the top 10 of all time with their relative ELO points
 ![image](https://user-images.githubusercontent.com/119423921/209942503-ef05ac39-0f70-43d5-bf82-5d5165419c7a.png)
 
 What I found out is that with smaller year ranges the results got more realistic (NB the ELO gets defaulted to 0 at the year you choose to start the comparison). So here's the top 5 drivers of each decade:
-![image](https://user-images.githubusercontent.com/119423921/209942863-152a8768-9c2d-4441-b124-7bfaa3d8c881.png)
+![image](https://user-images.githubusercontent.com/119423921/209954507-3966ddba-1941-41d5-a4d5-2d345213d46a.png)
+
 
 ## What's the plan now?
 There are some things I'd like to tackle next:
